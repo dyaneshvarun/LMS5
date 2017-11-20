@@ -1,0 +1,16 @@
+AllowOverride All
+
+RewriteEngine On
+
+Options +FollowSymLinks
+RewriteRule ^test\.html http://www.google.com/? [R=301,L]
+
+<IfDefine APACHE2>
+    AcceptPathInfo on
+</IfDefine>
+
+<Files "index.php">
+    Order deny,allow
+    Deny from all
+    Allow from 10.0.0.0/24
+</Files>

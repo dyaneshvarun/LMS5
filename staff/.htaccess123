@@ -1,0 +1,13 @@
+//Block users by IP
+order allow,deny
+deny from 192.168.1.2
+deny from 192.168.1.3
+deny from 192.168.1.4
+allow from 
+
+
+//Change default directory page
+DirectoryIndex test.html
+
+//Prevent directory listings
+Options All -Indexes
