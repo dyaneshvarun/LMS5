@@ -41,11 +41,11 @@ $(document).ready(function(){
 					allstaffName.push(obj.SN);
 				});
 			});
-	
+	$("#fsub1").prop("disabled",true);
 	$("#date1,#vacation").change(function(){
 		$("body").addClass("loading");
 		modal.style.display = "block";
-		$("#fsub1").prop("disabled",true);
+		
 		setTimeout(function(){
 			$("#session").prop('disabled',true);
 		$('#res').prop('disabled',false);
@@ -223,7 +223,7 @@ $(document).ready(function(){
 					type: 'post',
 					success: function(response){
 						//alert(php_script_response); // display response from the PHP script, if any
-						if(response!="ERRUPLOAD" && response=="DONE_UPLOAD")
+						if(response!="ERRUPLOAD" && response.includes("IST_LEAVE"))
 						{
 							fileNameIs = response;
 							//alert(fileNameIs);
