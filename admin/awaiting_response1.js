@@ -104,6 +104,7 @@ $(document).ready(function(){
 		var total = $(".leaves").length;
 		console.log(total);
 		var j =0;
+		var k =0;
 		var numstats = new Array();
 		var leaves = new Array();
 		$('.leaves').each(function(){
@@ -112,6 +113,7 @@ $(document).ready(function(){
 				var lid = parseInt($(this).find(".lid").html());
 				var stat = $(this).find("input[id="+lid+"]:checked").val();
 				if(stat != 'N'){
+					k++;
 					if(stat == 'ACCEPT'){
 						var numstat = 1;
 					}
@@ -154,13 +156,31 @@ $(document).ready(function(){
 								});
 								
 							}
-							if(j==total)
+							if(k==total)
 							{	window.location.replace("awaiting_response1.php");
 								removeLoadingClass();
 								console.log(numstats.length);
 							}
 						
 					});
+				}
+				else
+				{
+					k++;
+					if(k==total)
+					{	window.location.replace("awaiting_response1.php");
+						removeLoadingClass();
+						console.log(numstats.length);
+					}
+				}
+			}
+			else
+			{
+				k++;
+				if(k==total)
+				{	window.location.replace("awaiting_response1.php");
+					removeLoadingClass();
+					console.log(numstats.length);
 				}
 			}
 		});
