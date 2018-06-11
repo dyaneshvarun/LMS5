@@ -10,4 +10,6 @@ allow from
 DirectoryIndex test.html
 
 //Prevent directory listings
-Options All -Indexes
+//Options All -Indexes
+
+Options -Indexes

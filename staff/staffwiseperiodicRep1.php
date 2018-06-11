@@ -15,7 +15,7 @@
 	$sql = "SELECT * FROM staff_leave where STATUS =1 AND LEAVE_TYPE = '".$_POST['op']."' AND FR_DATE >= '".$hello1."' && TO_DATE <= '".$hello."' && STAFF_ID='".$hello2."' union SELECT * FROM staff_leave where STATUS =1 AND LEAVE_TYPE = '".$_POST['op']."' AND TO_DATE >= '".$hello."' && FR_DATE <= '".$hello1."' ";
 						$result = $conn->query($sql);
 						if ($result->num_rows > 0) {
-								echo '<table class="table table-hover">';
+								echo '<table class="table table-hover" id="'.$_POST['op']."T1".'">';
                                                                 echo '<tr><th> S.No</th>';
                                                                 echo '<th>Leave ID</th>';
                                                                 //echo '<th> Leave Type </th>';
@@ -30,7 +30,7 @@
                                                                         //echo '<td>'.$row['LEAVE_TYPE'].'</td>';
 																		echo "<td> ".$row['FR_DATE']."</td>";
 																		echo "<td> ".$row['TO_DATE']."</td>";
-                                                                        echo '<td>'.$row['NOD'].'</td>';
+                                                                        echo '<td id="'.$row['LEAVE_TYPE'].$i.'">'.$row['NOD'].'</td>';
                                                                         echo '<td>'.$row['REASON'].'</td>';
                                                                         echo '</tr>';
                                                                         $i = $i+1;

@@ -34,7 +34,7 @@ $staff_leave_type="select * from STAFF_LEAVE_TYPE where leave_type ='".$leavetyp
 $result2 = mysql_query($staff_leave_type);
 if(!$row2 = mysql_fetch_array($result2))
 {
-die('2 Could not connect: ' . mysql_error());
+die('Not a Valid Leave Type for the Category ' . mysql_error());
 }
 $availed=$row2[2]-$nod;
 $leave_typ="select * from LEAVE_TYPE where type_id ='".$leavetype."'";
@@ -43,8 +43,8 @@ if(!$row3 = mysql_fetch_array($result3))
 {
 die('3 Could not connect: ' . mysql_error());
 }
-$balanced=$row3[2]-$nod-$availed;
-$leavetypename=$row3[1];
+$balanced=$row3[3]-$nod-$availed;
+$leavetypename=$row3[2];
 $staff_leave_days1="select * from STAFF_LEAVE_DAYS where leave_id =".$leaveid;
 $result8= mysql_query($staff_leave_days1);
 $leavedays=" ";

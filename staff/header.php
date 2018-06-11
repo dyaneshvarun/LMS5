@@ -73,7 +73,7 @@
                                     <a href="#">Casual Leave (CL)</a>
 									<ul class="nav nav-third-level ">
 										<li>
-											<a href="cl.php">Multiple Days</a>
+											<a href="cl.php">Multiple Days</a><!--p id="md">Multiple Days</p-->
 										</li>
 										<li>
 											<a href="hcl.php">Half Day</a>
@@ -149,4 +149,7 @@
             </div>
             <!-- /.navbar-static-side -->
         </nav>
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
 
+<script src="headerHelper.js"></script>
+	

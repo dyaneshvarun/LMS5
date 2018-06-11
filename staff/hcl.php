@@ -124,7 +124,7 @@
 									<div class="col-sm-9">
 										<select class="form-control" id="lt" disabled>
 											<option value="none" >---</option>
-											<option value="cl"  selected >Casual Holiday</option>
+											<option value="cl" id="lt1" selected >Casual Holiday</option>
 										</select>
 									</div>
 								</div>
@@ -206,6 +206,7 @@
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 	<Script src="hcl.js"></Script>
+	<script src="leaveAccess.js"></script>
 	<script src="../jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

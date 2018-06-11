@@ -17,9 +17,14 @@
         echo $staffID;
         echo $staffName;
         //CHANGES
+		if($_POST['oper']=="insert")
         $sql ='INSERT INTO staff(`STAFF_ID`, `STAFF_NAME`, `DESIGNATION`, `USERNAME`, `PASSWORD`,`EMAILID`,`STATUS`,`CATEGORY`) VALUES ('.$staffID.',"'.$staffName.'","'.$dsgn.'","'.$staffID.'","'.$staffID.'","default@gmail.com",0,"'.$cat.'")';
+		else if($_POST['oper']=="update")
+		$sql ='UPDATE `staff` SET `STAFF_NAME`="'.$staffName.'",`DESIGNATION`="'.$dsgn.'",`CATEGORY` = "'.$cat.'" WHERE `STAFF_ID` = '.$staffID;
+		else if($_POST['oper']=="update1")
+		$sql ='UPDATE `staff` SET `CATEGORY` = "'.$cat.'" WHERE `STAFF_ID` = '.$staffID;
        //CHANGES
-       echo $staffID;
+       echo $sql;
         echo 'hi';
         if (mysqli_query($conn, $sql))
         {

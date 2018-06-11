@@ -89,6 +89,10 @@
 										$stat = "CANCELLED";
 										$cla = "danger";
 									}
+									else if($row['STATUS'] == 5){
+										$stat = "AUTO REJECTED";
+										$cla = "info";
+									}
 									else{
 										$stat = "UNDEFINED";
 									}

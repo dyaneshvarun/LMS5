@@ -7,57 +7,52 @@
 	}
 	function checkLevel($val){
 		if($val <= 50){
-			echo " progress-bar-success";
+			return " progress-bar-success";
 		}else if($val >50 && $val <=75){
-			echo " progress-bar-warning";
+			return " progress-bar-warning";
 		}
 		else{
-			echo " progress-bar-danger";
+			return " progress-bar-danger";
 		}
 	}
 	$sta_id = $_SESSION['STA_ID'];
-	/*$memcache = new Memcache;
-	$cacheAvailable = $memcache->connect('127.0.0.1','11211');
-	$key = "STAFF_INFO_".$sta_id;
-	if(!$staff_info = $memcache->get($key)){
-		//echo "Staff Cached";*/
 	$sql = "CALL GET_STAFF($sta_id)";
     $rs = mysqli_query($conn,$sql);
     if(!$row = mysqli_fetch_assoc($rs)){
         echo mysqli_error($conn);
     }
     $staff_info = $row;
-    //$key = "STAFF_INFO_" . $sta_id;
-    //$memcache->set($key,$row);
-       //header("Location:index.php");
-	//}
-	//echo $cacheAvailable;
 	$leaveType = array();
-	//$leaveType = $memcache->get('leave_type');
-	//if($leaveType){
-	//}
-	//else{
     mysqli_close($conn);
     $conn = mysqli_connect($hostname,$username,$password,$database);
 	$rows = getLeaveType($conn);
-    //$memcache->set('leave_type',$rows,MEMCACHE_COMPRESSED,1000);
-	//$leaveType = $memcache->get('leave_type');
-    $leaveType = $rows;
-	$cl = $leaveType[0];
+	$leaveType = $rows;
+	if($staff_info['CATEGORY']=="RT" || $staff_info['CATEGORY']=="RNT" )
+		$cl = $leaveType[0];
+	if($staff_info['CATEGORY']=="TF" )
+		$cl = $leaveType[9];
+	if($staff_info['CATEGORY']=="RS20" )
+		$cl = $leaveType[8];
+	if($staff_info['CATEGORY']=="RS30" || $staff_info['CATEGORY']=="RSO")
+		$cl = $leaveType[7];
 	$rh = $leaveType[5];
 	$scl = $leaveType[6];
 	$staffLeave = array();
-	//$key = "STAFF_LEAVE_".$sta_id;
-	//$staffLeave = $memcache->get($key);
-	//if(!$staffLeave){
 	$rows = getStaffLeave($conn,$sta_id);
-	//$memcache->set($key,$rows,MEMCACHE_COMPRESSED,1000);
-	//}
 	$staffLeave = $rows;
 	$s_cl=0;$s_rh =0;$s_scl=0;
 	foreach($staffLeave as $row){
-		if($row['LEAVE_TYPE'] == 'CL')
+		if($row['LEAVE_TYPE'] == 'CL' && $staff_info["CATEGORY"]=="RT")
 			$s_cl = $row['NOD'];
+		else if($row['LEAVE_TYPE'] == 'CL' && $staff_info["CATEGORY"]=="RNT")
+			$s_cl = $row['NOD'];
+		else if($row['LEAVE_TYPE'] == 'CL6' && $staff_info["CATEGORY"]=="TF")
+			$s_cl = $row['NOD'];
+		else if($row['LEAVE_TYPE'] == 'CL20' && $staff_info["CATEGORY"]=="RS20")
+			$s_cl = $row['NOD'];
+		else if($row['LEAVE_TYPE'] == 'CL30' && $staff_info["CATEGORY"]=="RS30")
+			$s_cl = $row['NOD'];
+		//OT and NT remaining
 		if($row['LEAVE_TYPE'] == 'RH')
 			$s_rh = $row['NOD'];
 		if($row['LEAVE_TYPE'] == 'SCL')
@@ -86,7 +81,7 @@
 		mysqli_error($conn);
 	}
 	$arcount = mysqli_num_rows($res1);
-	$sql = "SELECT * FROM STAFF_PERIOD_ALLOCATION WHERE LEAVE_ID IN (SELECT LEAVE_ID FROM STAFF_LEAVE WHERE STAFF_ID = $sta_id )AND STATUS = 2";
+	$sql = "SELECT * FROM STAFF_PERIOD_ALLOCATION WHERE ALTER_STAFF_ID = $sta_id AND (STATUS = 2 or STATUS =1) ";
 	//$sql = "SELECT LEAVE_ID FROM STAFF_LEAVE WHERE STAFF_ID = $sta_id AND STATUS = 2";
 	if(!$res1 = mysqli_query($conn,$sql)){
 		mysqli_error($conn);
@@ -111,7 +106,9 @@
 	}
 	$credits = $row;
 ?>
+
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -229,7 +226,7 @@
                         </a>
                     </div>
                 </div>
-                <!--div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6">
                     <div class="panel panel-red">
                         <div class="panel-heading">
                             <div class="row">
@@ -238,19 +235,19 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge"><?php echo $dlcount; ?></div>
-                                    <div>Declined Leaves</div>
+                                    <div>Compensations</div>
                                 </div>
                             </div>
                         </div>
-                        <a href="#">
+                        <a href="acceptedAlter.php">
                             <div class="panel-footer">
-                                <span class="pull-left">Declined Compensations</span>
+                                <span class="pull-left">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                 <div class="clearfix"></div>
                             </div>
                         </a>
                     </div>
-                </div-->
+                </div>
             </div>
             <!-- /.row -->
             <div class="row">
@@ -262,22 +259,21 @@
                         <div class="panel-body">
 							<h4>Casual Leave (CL)</h4>
 							<div class="progress progress-striped">
-								<div class="progress-bar <?php checkLevel($clper);?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100-(($s_cl / $cl['NOD'])*100);?>%">
-									<span> <?php echo ($cl['NOD']-$s_cl) . " / " . $cl['NOD'];?></span>
+								<div class="progress-bar <?php echo checkLevel($clper);?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100-(($s_cl / $cl['NOD'])*100);?>%">
+									<span> <?php echo ($cl['NOD']-$s_cl) . " / " . $cl['NOD'];
+										?></span>
                                 </div>
+								
                             </div>
-                            <h4>Restricted Holiday (RH)</h4>
-							<div class="progress progress-striped">
-								<div class="progress-bar <?php checkLevel($rhper);?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100-(($s_rh / $rh['NOD'])*100);?>%">
-									<span> <?php echo ($rh['NOD']-$s_rh) . " / " . $rh['NOD'];?></span>
-                                </div>
-                            </div>
-                            <h4>Special Casual Leave (SCL)</h4>
-							<div class="progress progress-striped">
-								<div class="progress-bar <?php checkLevel($sclper);?>" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo 100-(($s_scl / $scl['NOD'])*100);?>%">
-									<span> <?php echo ($scl['NOD']-$s_scl) . " / " . $scl['NOD'];?></span>
-                                </div>
-                            </div>
+							<?php if($staff_info['CATEGORY']=="RT" || $staff_info['CATEGORY']=="RNT")
+							{
+							echo "<h4>Restricted Holiday (RH)</h4><div class='progress progress-striped'>
+								<div class='progress-bar ". checkLevel($rhper)."' role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width:". (100-(($s_rh / $rh['NOD'])*100))."%;'><span>".($rh['NOD']-$s_rh) . " / " . $rh['NOD']."</span> </div></div>";
+								echo "<h4>Special Casual Holiday (RH)</h4><div class='progress progress-striped'>
+								<div class='progress-bar ". checkLevel($sclper)."' role='progressbar ' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style='width:". (100-(($s_scl / $scl['NOD'])*100))."%;'><span>".($scl['NOD']-$s_scl) . " / " . $scl['NOD']."</span> </div></div>";
+							}
+                               
+							?>
                         </div>
                     </div>
                 </div>

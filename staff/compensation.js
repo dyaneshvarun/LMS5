@@ -1,6 +1,7 @@
 var opterr = 0,noderr = 1,d1err =1, d2err =1, reserr=1;
 var apperr = "<span class='glyphicon glyphicon-remove form-control-feedback'></span><span class='help-block'>";
 var pherr=0,phArray = new Array(),allstaffID= new Array(),allstaffName = new Array();
+$body = $("body");
 function dispErr(tag,msg){
 	$(tag).closest("div").addClass("has-error").addClass("has-feedback");
 	$(tag).closest("div").find('span').remove();
@@ -66,7 +67,7 @@ $(document).ready(function(){
 	$("#date1,#date2").focusin(function(){
 		
 		$(this).datepicker(
-			{dateFormat: 'dd/mm/yy',  changeMonth: true, changeYear: true, yearRange: '2016:2017'}
+			{dateFormat: 'dd/mm/yy',  changeMonth: true, changeYear: true, yearRange: '2016:2019'}
 		);
 	});
 	$("#nod").change(function(){
@@ -76,6 +77,7 @@ $(document).ready(function(){
 		if(nod > $("#cpl").val()){
 			alert("CPL Credits are low. You cannot avail.");
 			noderr = 0;	
+			$("#date1").prop('disabled',true);	
 		}
 		else if(nod<0)
 		{
@@ -119,7 +121,7 @@ $(document).ready(function(){
 			if(day!=0 && day!=6  && pherr==false ){
 				var showDate = $.datepicker.formatDate("dd/mm/yy",temp);
 				var dbDate = $.datepicker.formatDate("yy--mm-dd",temp);
-				var insr = "<center><h3>Duty Alteration</h3></center><div class='form-group' class='altrem' id='dutyalter11'><label class='control-label col-sm-3' for='nod'>" + showDate + "</label><div class='col-sm-9'><table class='table table-bordered tt' id='tableD" + t1 + "'><tr><th>Date</th><th>Class</th><th>Hour</th><th>Alternatives</th><th>Others</th></tr></table></div></div>";
+				var insr = "<div class='form-group' class='altrem' id='dutyalter11' style='width:1000px;'><div class='col-lg-12'><table class='table table-bordered tt' id='tableD" + t1 + "' > <tr> <th> Date </th> <th> Class  </th> <th> A/P </th><th> Hour </th> <th> Alternatives</th><th>Others</th><th>Postponed Date</th><th>Postponed Hour</th></tr> </table> </div> </div>";
 				$("#altertitle1").append(insr);
 				t1++;
 			}
@@ -155,10 +157,11 @@ $(document).ready(function(){
 						$.each(data1,function(i,obj){
 							t2 = t1;
 							var tablen = "#tableD" + t2;
-							var ins = "<tr id='inrow'><td class='col-xs-3'>";
+							var ins = "<tr id='inrow'><td class='col-xs-2'>";
 							ins += "<input class='form-control' type='text' id='datee' value='"+ dbDate + "' disabled></input></td>";
 							ins += "<td class='col-sm-2'><input type='text' class='form-control' id='class1' value='" + obj.CLASS_ID + "' disabled ></td>";
-							ins += "<td class='col-sm-1'><input type='text' class='form-control' id='hr' value='" + obj.HOUR + "' disabled ></td>";
+							ins += "<td class='col-sm-1'><input type='text' class='form-control' id='hr' value='" + obj.HOUR + "'  disabled></td>";
+							ins += "<td><input type='radio' name='choose"+t2+i+"' id='ap' value='A' checked>Alternate</input></td>";//changed code
 							ins += "<td><select class='form-control' id='alterstaff'>";
 							$.ajax({
 								type: 'POST',
@@ -178,9 +181,21 @@ $(document).ready(function(){
 							$.each(allstaffID,function(j){
 								ins += "<option value='"+allstaffID[j]+ "'>" + allstaffName[j] + "</option>";
 							});
-							ins += "</td></tr>";
+							ins += "</td><td></td><td></td></tr>";
+							
+							//postRow
+							ins += "<tr id='postrow' ><td></td><td></td>";
+							ins += "<td></td>";
+							ins += "<td><input type='radio' name='choose"+t2+i+"' id='ap' value='P'>Postpone</input></td>";
+							ins += "<td><p hidden id='psn' >"+$("#name").val()+"</p></td><td></td>";
+							ins += "<td><input class='form-control' type='text' id='pd"+t2+i+"' disabled ></input><input type='button' class='btn btn-success' value='Check Slot' id='cs"+t2+i+"'></input></td>";
+							ins += "<td class='col-sm-1'><select class='form-control' id='hr1"+t2+i+"' value='" + obj.HOUR + "' disabled ></td></tr>"
 							$(tablen).append(ins);
 							countAlter++;
+							$("#psn").hide();
+							$("#pd"+t2+i+"").hide();
+							$("#hr1"+t2+i+"").hide();
+							$("#cs"+t2+i+"").hide();
 						});
 				}});
 				$(this).delay(1000);
@@ -192,7 +207,7 @@ $(document).ready(function(){
 			}
 			temp.setDate(temp.getDate() + 1);
 		}	
-		$body.removeClass("loading"); 
+		$("body").removeClass("loading"); 
 		modal.style.display = "none";
 		},500);
 	});
@@ -259,9 +274,12 @@ $(document).ready(function(){
 		var row = $(this).find("td");
 		$(".tt #inrow").each(function(){
 				var row123 = $(this).find("td");
+				var apopt = row123.find("input[type=radio][name^=choose]:checked").val();
+				if(apopt=='A'){
 				var alter123 = row123.find("#alterstaff").val();
 				if (alter123 == '')
 					alter123 = row123.find("#alterstaff1").val();	
+				if (alter123 == '') staffErr = 1;}	
 				if (alter123 == '') staffErr = 1;
 			});
 		if(opterr == 0 && noderr == 0 && reserr == 0 && d1err == 0 && staffErr==0){
@@ -270,15 +288,28 @@ $(document).ready(function(){
 			$(".tt #inrow").each(function(){
 				var row = $(this).find("td");
 				var value = row.find("#datee").val();
-				var hr = row.find("#hr").val();
 				var cid = row.find("#class1").val();
-				var alter = row.find("#alterstaff").val();
-				if (alter == '')
-					alter = row.find("#alterstaff1").val();	
-				var eachAlter = {year:value, hour:hr, alterstaff:alter,class:cid};
+				alert(row.find("input[type=radio][name^=choose]:checked").val());
+				if(row.find("input[type=radio][name^=choose]:checked").val()=='A'){
+					var hr = row.find("#hr").val();
+					var alter = row.find("#alterstaff").val();
+					if (alter == '')
+						alter = row.find("#alterstaff1").val();	
+					var eachAlter = {year:value, hour:hr, alterstaff:alter,class:cid,pdate:'X',phr:'X'};
+					alternateMail.push(alter);
+				}
+				else//Value is P
+				{
+					var row1 = $(this).next();
+					var pd = row1.find("input[id^=pd]").val();
+					var hr = $(this).find("#hr").val();
+					var phr = row1.find("select[id^=hr1]").val();
+					var alter = $("#sid").val();
+					alert(pd);
+					var eachAlter = {year:value, hour:hr, alterstaff:alter, class:cid,pdate:pd,phr1:phr};
+					alternateMail.push(alter);
+				}
 				alterArray.push(eachAlter);
-				
-				alternateMail.push(alter);
 			});
 			var alterName = new Array();
 			var alterEmail = new Array();
@@ -379,7 +410,24 @@ $(document).ready(function(){
 					},function(data,status){
 		
 					});;
+					//Module to be added
+					var cplid = new Array();
+					var nod = $("#nod").val();
+					for (var m=0;m<nod;m++)cplid.push(cleaveid[m]);
 					
+					$.post("qengine.php",{
+						op:20,
+						leaveid : cplid,
+						nod : nod
+					},function(data,status){
+						console.log(data);
+						alert("Leave Requested Successfully");
+						$body.removeClass("loading");
+						modal.style.display = "none";
+						window.location.replace("index.php");
+						window.open("table-withoutdays.php");
+					});
+					//Added Module
 					alert("Leave Requested Successfully");
 					$body.removeClass("loading");
 					modal.style.display = "none";
@@ -405,3 +453,79 @@ $(document).ready(function(){
 		},1000);	
 	});
 });
+//Date Picker for Postponed Date
+	$(document).on('focusin click','[id^=pd]',function(){
+		$(this).datepicker(
+			{dateFormat: 'yy-mm-dd',  changeMonth: true, changeYear: true, yearRange: '2016:2019',minDate:new Date}
+		);
+		$(this).parent().parent().find("td").find("select[id^=hr1] option").remove();
+		$(this).parent().parent().find("td").find("select[id^=hr1]").hide();
+	});
+	
+	//Alteration or Postponement Selection
+	$("#altertitle1").on('change','input[type=radio][name^=choose]',function()
+	{
+		var checkedap = $(this).val();
+		if(checkedap=='P')
+		{	var row = $(this).parent().parent().find("td");
+			var datep = row.find("input[id^=pd]");
+			var csp = row.find("input[id^=cs]");
+			csp.show();
+			$(datep).prop('disabled',false);$(datep).show();
+			row.find("#psn").show();
+			var rowbefore = $(this).parent().parent().prev();
+			rowbefore.find("#alterstaff").val('');
+			rowbefore.find("#alterstaff1").val('');
+			rowbefore.find("#alterstaff").hide();
+			rowbefore.find("#alterstaff1").hide();
+			//rowbefore.find("#hr").hide();
+		}else{
+			var rownext = $(this).parent().parent().next().find("td");
+			var datep = rownext.find("input[id^=pd]");
+			$(datep).prop('disabled',true);
+			$(datep).hide();
+			rownext.find("#psn").hide();
+			rownext.find("input[id^=cs]").hide();
+			rownext.find("select[id^=hr1]").hide();
+			rownext.find("select[id^=hr1] option").remove();
+			var row = $(this).parent().parent().find("td");
+			var as = row.find("#alterstaff");
+			var as1 = row.find("#alterstaff1");
+			as.prop('disabled',false);
+			as1.prop('disabled',false);
+			as.show();
+			as1.show();
+			//row.find("#hr").show();
+		}
+	});
+	//Check Slot Function
+	$("#altertitle1").on('click','input[id^=cs]',function(){
+		var row = $(this).parent().parent().find("td");
+		var pd = row.find("input[id^=pd]").val();
+		var clas = $(this).parent().parent().prev().find("td").find("#class1").val();
+		var opt = "";
+		var avail = [1,2,3,4,5,6,7,8];
+		$.post("qengine.php",{
+			op:23,
+			clasVal: clas,
+			posd: pd
+		},function(data,status){
+			var parsed = $.parseJSON(data);
+			$.each(parsed,function(i,obj){
+				if(avail.includes(parseInt(obj.HOUR))) avail.splice(avail.indexOf(parseInt(obj.HOUR)),1);
+			})
+			if(avail.length == 0)
+			{				
+				row.find("select[id^=hr1]").hide();
+				alert("No free Slot found. Please change the postponement date.");
+			}
+			else{
+			for(var i = 0;i < avail.length;i++)opt+="<option value = "+avail[i]+" >"+avail[i]+"</option>";
+			var sel = row.find("select[id^=hr1]");
+			var id = "#"+ sel.attr('id');
+			$(id+" option"+"").remove();
+			$(id).append(opt);
+			$(id).show();
+			$(id).prop('disabled',false);}
+		});
+	});

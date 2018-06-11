@@ -2,7 +2,7 @@ $(document).ready(function(){
 	$("#date1,#date2").focusin(function(){
 		
 		$(this).datepicker(
-			{dateFormat: 'dd/mm/yy',  changeMonth: true, changeYear: true, yearRange: '2016:2017'}
+			{dateFormat: 'dd/mm/yy',  changeMonth: true, changeYear: true, yearRange: '2016:2019'}
 		);
 	});
 	$("#submitButton").on('click',function(e){

@@ -128,7 +128,16 @@
 										<input type="input" class="form-control" id="sid" value="<?php echo $staff_info['STAFF_ID'];?>" disabled>
 									</div>
 								</div>
-								
+								<div class="form-group">
+									<label class="control-label col-sm-3" for="lt">Leave Type : </label>
+									<div class="col-sm-9">
+										<select class="form-control" id="lt" disabled >
+											<option value="none" >---</option>
+											<option value="od" selected >On Duty</option>
+											
+										</select>
+									</div>
+								</div>
 								<div class="form-group" id="nodgp">
 									<label class="control-label col-sm-3" for="nod">No of days : </label>
 									<div class="col-sm-9">
@@ -206,6 +215,7 @@
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 	<Script src="od.js"></Script>
+	<script src="leaveAccess.js"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

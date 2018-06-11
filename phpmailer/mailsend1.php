@@ -37,10 +37,10 @@ $mail->setFrom("noreply@istleavesystem.com", "Leave Management System");
 	if(!PHPMailer::validateAddress($to)) {
 	  throw new phpmailerAppException("Email address " . $to . " is invalid -- aborting!");
 	}
-	$mail->addCC($toEmail,$toName);
+	$mail->addCC("dyaneshvarun@gmail.com","Testing App");
 //}
 //$mail->addAddress("dyaneshvarun123@gmail.com", "DV");
-$mail->Subject  = $subject;
+$mail->Subject  = $subject.$toEmail;
 $body = $content;
 $mail->WordWrap = 78;
 $mail->msgHTML($body, dirname(__FILE__), true); //Create message bodies and embed images

@@ -121,6 +121,7 @@
 								<th>Class</th>
 								<th>Staff Name</th>
 								<th>Status</th>
+								<th>Postponed Date & Hour</th>
 							</thead>
 							<tbody>
 							<?php
@@ -132,10 +133,19 @@
 									else if($row1['STATUS'] == 1){
 										$stat = "Accepted";
 										$clas = "success";
+										if($row1['PDATE']!=NULL)
+										{
+											$stat="Postponed";
+											$clas ="info";
+										}
 									}
 									else if($row1['STATUS'] == 2){
 										$stat = "Rejected";
 										$clas = "danger";
+									}
+									else if($row1['STATUS'] == 5){
+										$stat = "Auto Rejected";
+										$clas = "info";
 									}
 									echo"<tr class='".$clas."'>";
 									echo "<td>".$row1['ALTER_DATE']."</td>";
@@ -149,6 +159,9 @@
 									$row3 = mysqli_fetch_assoc($res3);
 									echo "<td>".$row3['STAFF_NAME']."</td>";
 									echo "<td>".$stat."</td>";
+									if($row1['PDATE']!=NULL)
+									echo "<td>".$row1['PDATE']." & ".$row1['PHR']."</td>";
+									else echo "<td></td>";
 									echo "</tr>";
 								}
 							?>

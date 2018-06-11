@@ -1,11 +1,15 @@
 <?php
 	session_start();
+	require_once("../arc/dbconnect.php");
+	require_once("functions.php");
 	if(!$sta_id = $_SESSION['STA_ID']){
 		header("Location:login.php");
 		return;
 	}
-	require_once("../arc/dbconnect.php");
-	require_once("functions.php");
+	if(!$sta_id = $_SESSION['STA_ID']){
+		header("Location:login.php");
+		return;
+	}
 	$sql = "CALL GET_STAFF($sta_id)";
 	$rs = mysqli_query($conn,$sql);
 	if(!$row = mysqli_fetch_assoc($rs)){
@@ -160,7 +164,7 @@
 									</div>
 								</div>
 								<div class="form-group" id="altertitle1">
-									<label class="control-label col-sm-offset-2 col-sm-8" for="date1"><h3>Duty Alteration </h3></label>
+									
 								</div>
 								<br>
 								
@@ -197,7 +201,8 @@
 
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-	<script src="cl1.js"></script>
+	<script src="cl2.js"></script>
+	<script src="leaveAccess.js"></script>
 	<script src="../jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
