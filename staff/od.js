@@ -14,6 +14,7 @@ function clearErr(tag){
 $body = $("body");
 
 $(document).ready(function(){
+	$("#fsub1").prop('disabled',true);
 				var sta_id = $("#sid").val();
 	// Get the modal
 	var modal = document.getElementById('modal');
@@ -45,7 +46,7 @@ $(document).ready(function(){
 		$("#date1").prop('disabled',false);
 		$("#res").prop('disabled',false);
 		$("#addr").prop('disabled',false);
-		$("#fsub1").prop('disabled',true);
+		
 	});
 	$("#date1,#vacation").change(function(){
 		$("body").addClass("loading");
@@ -220,7 +221,7 @@ $(document).ready(function(){
 					type: 'post',
 					success: function(response){
 						//alert(php_script_response); // display response from the PHP script, if any
-						if(response!="ERRUPLOAD" && response=="DONE_UPLOAD")
+						if(response!="ERRUPLOAD" && response.includes("IST_LEAVE")==true)
 						{
 							fileNameIs = response;
 							//alert(fileNameIs);
