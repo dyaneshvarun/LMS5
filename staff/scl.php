@@ -119,6 +119,16 @@
 									</div>
 								</div>
 								<div class="form-group">
+									<label class="control-label col-sm-3" for="lt">Leave Type : </label>
+									<div class="col-sm-9">
+										<select class="form-control" id="lt" disabled >
+											<option value="none" >---</option>
+											<option value="scl" selected >Special Casual Leave</option>
+											
+										</select>
+									</div>
+								</div>
+								<div class="form-group">
 									<div class="col-sm-3"><h4>Leave Statistics</h4></div>
 									<label class="control-label col-sm-2" for="name">Availed : </label>
 									<div class="col-sm-2">
@@ -205,6 +215,7 @@
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 	<Script src="scl1.js"></Script>
+	<script src="leaveAccess.js"></script>
 	<script src="../jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

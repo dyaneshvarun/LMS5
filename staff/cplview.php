@@ -91,7 +91,7 @@
 								<th>Reason</th>
 								<th>Apply Date</th>
 								<th>Status</th>
-								<th>Leave ID</th></tr>
+								<th class="col-lg-2">Utilized for Leave ID</th></tr>
 								<?php
 									$i=0;
 									$DaysCount = 24*3600*180; //180 days
@@ -122,12 +122,12 @@
 										}
 										echo "<tr class=$clas>";
 										$i=$i+1;
-										$validity = date('Y-m-d',strtotime($row['CDATE']) + $DaysCount);
+										$validity = date('d-m-Y',strtotime($row['CDATE']) + $DaysCount);
 										echo "<td>$i</td>";
-										echo "<td>$row[CDATE]</td>";
+										echo "<td>".date('d-m-Y',strtotime($row['CDATE']) )."</td>";
 										echo "<td>$validity</td>";
 										echo "<td>$row[REASON]</td>";
-										echo "<td>$row[APPLY_DATE]</td>";
+										echo "<td>".date('d-m-Y',strtotime($row[APPLY_DATE]))."</td>";
 										echo "<td>$stat</td>";
 										echo "<td>$leaveID</td>";
 										echo "</tr>";

@@ -91,6 +91,9 @@
                                     <a href="insert-class.php">Add Class</a>
                                 </li>
 								<li>
+                                    <a href="leaveallocation.php">Leave Allocation</a>
+                                </li>
+								<li>
                                     <a href="#">Timetable</a>
 									<ul class="nav nav-third-level">
 										<li>

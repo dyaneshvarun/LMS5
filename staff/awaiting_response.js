@@ -48,8 +48,18 @@ $(document).ready(function(){
 				data: declineAlterArray,
 				leaveId: dleaveIds
 			},function(data,status){
-				alert(data);	
+				//alert(data);
+				
 			});
+			//Auto Reject Options
+			$.post("qengine.php",
+			{
+				op: 24,
+				leaveId: dleaveIds
+			},function(data,status){
+				//alert(data);	
+			});
+			alert("Done");
 			console.log("DAA");console.log(declineAlterArray);
 		}
 		$.post("qengine.php",

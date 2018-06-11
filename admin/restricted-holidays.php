@@ -99,7 +99,7 @@
 
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
-	<Script src="public-holidays.js"></Script>
+	<Script src="public-holidays1.js"></Script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

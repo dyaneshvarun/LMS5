@@ -13,7 +13,7 @@
 		header("Location:login.php");
 		
 	}*/
-	$sql = "SELECT * FROM STAFF_LEAVE WHERE STAFF_ID  = $sta_id ORDER BY LEAVE_ID DESC LIMIT 30";
+	$sql = "SELECT * FROM STAFF_LEAVE WHERE STAFF_ID  = $sta_id ORDER BY LEAVE_ID DESC ";
 	if(!$rs = mysqli_query($conn,$sql)){
 		Die (mysqli_error($conn));
 	}
@@ -102,6 +102,10 @@
 									}else if($row['STATUS'] == 2){
 										$stat = "REJECTED";
 										$cla = "danger";
+									}
+									else if($row['STATUS'] == 5){
+										$stat = "AUTO REJECTED";
+										$cla = "info";
 									}else{
 										$stat = "UNDEFINED";
 									}

@@ -86,12 +86,17 @@ $(document).ready(function(){
 	$("#date1,#date2").focusin(function(){
 		
 		$(this).datepicker(
-			{dateFormat: 'dd/mm/yy',  changeMonth: true, changeYear: true, yearRange: '2016:2017'}
+			{dateFormat: 'dd/mm/yy',  changeMonth: true, changeYear: true, yearRange: '2016:2019'}
+		);
+	});
+	$(document).on('focusin','#pd',function(){
+		$(this).datepicker(
+			{dateFormat: 'yy--mm-dd',  changeMonth: true, changeYear: true, yearRange: '2016:2019'}
 		);
 	});
 	$("#nod").change(function(){
-		var nod = $("#nod").val();
-		var balance = $("#bal").val();
+		var nod = parseInt($("#nod").val());
+		var balance = parseInt($("#bal").val());
 		$("#date1,#date2").val("");
 		if(nod >= 1 && nod<=balance ){
 			noderr = 0;	
@@ -132,7 +137,7 @@ $(document).ready(function(){
 			if(day!=0 && day!=6  && pherr==false ){
 				var showDate = $.datepicker.formatDate("dd/mm/yy",temp);
 				var dbDate = $.datepicker.formatDate("yy--mm-dd",temp);
-				var insr = "<center><h3>Duty Alteration</h3></center><div class='form-group' class='altrem' id='dutyalter11'><label class='control-label col-sm-3' for='nod'>" + showDate + "</label><div class='col-sm-9'><table class='table table-bordered tt' id='tableD" + t1 + "'><tr><th>Date</th><th>Class</th><th>Hour</th><th>Alternatives</th><th>Others</th></tr></table></div></div>";
+				var insr = "<center><h3>Duty Alteration</h3></center><div class='form-group' class='altrem' id='dutyalter11'><label class='control-label col-sm-2' >" + showDate + "</label><div class='col-sm-10'><table class='table table-bordered tt' id='tableD" + t1 + "'><tr><th>Date</th><th>Class</th><th>Hour</th><th>Alternatives</th><th>Others</th><th>Postponed Date(if applicable)</th></tr></table></div></div>";
 				$("#altertitle1").append(insr);
 				t1++;
 			}
@@ -167,10 +172,10 @@ $(document).ready(function(){
 						$.each(data1,function(i,obj){
 							t2 = t1;
 							var tablen = "#tableD" + t2;
-							var ins = "<tr id='inrow'><td class='col-xs-3'>";
+							var ins = "<tr id='inrow'><td class='col-xs-2'>";
 							ins += "<input class='form-control' type='text' id='datee' value='"+ dbDate + "' disabled></input></td>";
 							ins += "<td class='col-sm-2'><input type='text' class='form-control' id='class1' value='" + obj.CLASS_ID + "' disabled ></td>";
-							ins += "<td class='col-sm-1'><input type='text' class='form-control' id='hr' value='" + obj.HOUR + "' disabled ></td>";
+							ins += "<td class='col-sm-1'><input type='text' class='form-control' id='hr' value='" + obj.HOUR + "'  disabled></td>";
 							ins += "<td><select class='form-control' id='alterstaff'>";
 							$.ajax({
 								type: 'POST',
@@ -190,7 +195,8 @@ $(document).ready(function(){
 							$.each(allstaffID,function(j){
 								ins += "<option value='"+allstaffID[j]+ "'>" + allstaffName[j] + "</option>";
 							});
-							ins += "</td></tr>";
+							ins += "</td>";
+							ins += "<td><input class='form-control' type='text' id='pd' value='"+ dbDate + "' disabled></input></td></tr>";
 							$(tablen).append(ins);
 							countAlter++;
 						});
@@ -208,6 +214,15 @@ $(document).ready(function(){
 		},500);
 		
 	
+	});
+	$(document).on('change',"#alterstaff1",function(){
+		var a = $("#alterstaff1").val();
+		var b = $("#sid").val();
+		if(a == b)
+		{
+			$("#pd").prop('disabled',false);
+			$("#hr").prop('disabled',false);
+		}
 	});
 	$("#date1").change(function(){
 		var td1 = $("#date1").val();
@@ -288,9 +303,11 @@ $(document).ready(function(){
 				var hr = row.find("#hr").val();
 				var cid = row.find("#class1").val();
 				var alter = row.find("#alterstaff").val();
+				var pd = $(this).next().find("td").find("#pd").val();
+				alert(pd);
 				if (alter == '')
 					alter = row.find("#alterstaff1").val();	
-				var eachAlter = {year:value, hour:hr, alterstaff:alter,class:cid};
+				var eachAlter = {year:value, hour:hr, alterstaff:alter,class:cid,pdate:pd};
 				alterArray.push(eachAlter);
 				
 				alternateMail.push(alter);

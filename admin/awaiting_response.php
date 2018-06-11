@@ -110,9 +110,9 @@
 										<td><?php echo $row['TO_DATE']; ?></td>
 										<td><?php echo $row['NOD']; ?></td>
 										<td><select class="form-control leavestat" id="<?php echo $row['LEAVE_ID']; ?>">
-											<option value="none">----</option>
-											<option value="ACCEPT">ACCEPT</option>
-											<option value="REJECT">REJECT</option>
+												<option value="none">----</option>
+												<option value="ACCEPT">ACCEPT</option>
+												<option value="REJECT">REJECT</option>
 										</select></td>
 									</tr>
 							<?php } ?>

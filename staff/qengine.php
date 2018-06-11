@@ -29,8 +29,9 @@ $tscl = $leaveType[6];
 $tml = $leaveType[3];
 $tel = $leaveType[2];
 
-
-
+$tcl25 = $leaveType[8];
+$tcl30 = $leaveType[7];
+$tcl6 = $leaveType[9];
 $staffLeave = array();
 //$key = "STAFF_LEAVE_".$sta_id;
 //$staffLeave = $memcache->get($key);
@@ -45,8 +46,9 @@ $s_cl = 0;$s_rh=0;$s_scl=0;
 
 $s_ml=0;
 $s_el=0;
-
-
+$s_cl25=0;
+$s_cl30 =0;
+$s_cl6 =0;
 
 $conn = mysqli_connect($hostname,$username,$password,$database);
 foreach($staffLeave as $row){
@@ -61,14 +63,22 @@ if($row['LEAVE_TYPE'] == 'ML')
 {
 $s_ml = $row['NOD'];
 }
-
-
 if($row['LEAVE_TYPE'] == 'EL')
 {
 $s_el = $row['NOD'];
 }
-
-
+if($row['LEAVE_TYPE'] == 'CL20')
+{
+$s_cl25 = $row['NOD'];
+}
+if($row['LEAVE_TYPE'] == 'CL30')
+{
+$s_cl30 = $row['NOD'];
+}
+if($row['LEAVE_TYPE'] == 'CL6')
+{
+$s_cl6 = $row['NOD'];
+}
 }
 
 if(!isset($_POST['op'])){
@@ -110,7 +120,6 @@ switch($op){
 				echo json_encode($elData);
 			}
 
-
 			if($type == 'rh'){
 				$rhData = array();
 				$rhData['avail'] = $s_rh;
@@ -121,6 +130,24 @@ switch($op){
 				$sclData = array();
 				$sclData['avail'] = $s_scl;
 				$sclData['total'] = $tscl['NOD'];
+			}	
+			if($type == 'cl20'){
+				$tcl25Data = array();
+				$tcl25Data['avail'] = $s_cl25;
+				$tcl25Data['total'] = $tcl25['NOD'];
+				echo json_encode($tcl25Data);
+			}	
+			if($type == 'cl6'){
+				$tcl6Data = array();
+				$tcl6Data['avail'] = $s_cl6;
+				$tcl6Data['total'] = $tcl6['NOD'];
+				echo json_encode($tcl6Data);
+			}	
+			if($type == 'cl30'){
+				$tcl30Data = array();
+				$tcl30Data['avail'] = $s_cl30;
+				$tcl30Data['total'] = $tcl30['NOD'];
+				echo json_encode($tcl30Data);
 			}	
 		}
 		break;
@@ -180,12 +207,13 @@ switch($op){
 					$leavel['alterstaff'] = 'NULL';
 					//echo $leavel[alterstaff];
 				}
-				
-				$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',0,$clas2)";
-				
+				if($leaveAlter[$i]['pdate']=='X' || $leaveAlter[$i]['pdate']=='')
+					$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',0,$clas2,NULL,NULL)";
+				else
+					$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',1,$clas2,'".$leaveAlter[$i]['pdate']."',".$leaveAlter[$i]['phr1'].")";
 				if(!$res1 = mysqli_query($conn,$sql12)){
 					echo $sql12;
-					echo "3 : " .$leaveAlter[1]['class'] ."HI".$clas. mysqli_error($conn);
+					echo "3 : " .$leaveAlter[$i]['pdate'] ."HI".$clas.$leave1['phr1']. mysqli_error($conn);
 					exit();
 				}
 			}}
@@ -358,11 +386,12 @@ switch($op){
 			}*/
 		}
 		echo 1;
-		return;
-		exit;
+		break;
+		//return;
+		//exit;
 	}
 	case '8':{
-		$sql = "SELECT STAFF_ID AS ID, STAFF_NAME AS SN FROM STAFF WHERE CATEGORY = 't'";
+		$sql = "SELECT STAFF_ID AS ID, STAFF_NAME AS SN FROM STAFF";
 		echo sqlToJson($conn,$sql);
 		break;
 	}
@@ -499,7 +528,10 @@ switch($op){
 					//echo $leavel[alterstaff];
 				}
 				
-				$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',0,$clas2)";
+				if($leaveAlter[$i]['pdate']=='X' || $leaveAlter[$i]['pdate']=='')
+					$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',0,$clas2,NULL,NULL)";
+				else
+					$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',1,$clas2,'".$leaveAlter[$i]['pdate']."',".$leaveAlter[$i]['phr1'].")";
 				
 				if(!$res1 = mysqli_query($conn,$sql12)){
 					echo $sql12;
@@ -615,14 +647,16 @@ switch($op){
 				if($leavel['alterstaff'] == ''){
 					$leavel['alterstaff'] = 'NULL';
 				}
-				
-				$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',0,$clas2)";
-				
+				if($leaveAlter[$i]['pdate']=='X' || $leaveAlter[$i]['pdate']=='')
+					$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',0,$clas2,NULL,NULL)";
+				else
+					$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',1,$clas2,'".$leaveAlter[$i]['pdate']."',".$leaveAlter[$i]['phr1'].")";
 				if(!$res1 = mysqli_query($conn,$sql12)){
 					echo $sql12;
-					echo "3 : " .$leaveAlter[1]['class'] ."HI".$clas. mysqli_error($conn);
+					echo "3 : " .$leaveAlter[$i]['pdate'] ."HI".$clas.$leave1['phr1']. mysqli_error($conn);
 					exit();
 				}
+				
 			}}
 			if($noAlter == 0)echo 1;
 			else echo 2;
@@ -685,7 +719,10 @@ switch($op){
 					$leavel['alterstaff'] = 'NULL';
 				}
 				
-				$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',0,$clas2)";
+				if($leaveAlter[$i]['pdate']=='X' || $leaveAlter[$i]['pdate']=='')
+					$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',0,$clas2,NULL,NULL)";
+				else
+					$sql12 = "INSERT INTO STAFF_PERIOD_ALLOCATION VALUES ($sldid,$leavel[hour],$leavel[alterstaff],'$leavel[year]',1,$clas2,'".$leaveAlter[$i]['pdate']."',".$leaveAlter[$i]['phr1'].")";
 				
 				if(!$res1 = mysqli_query($conn,$sql12)){
 					echo $sql12;
@@ -713,7 +750,7 @@ switch($op){
 	case '19':
 	{
 		$staffid = $_POST['staffId'];
-		$sql = "SELECT CDATE,LEAVEDATE_ID,REASON from compensation_leave_days WHERE STAFF_ID =$staffid AND STATUS = 1 AND abs(DATEDIFF(CDATE,CURDATE()))<90 ORDER BY CDATE";
+		$sql = "SELECT CDATE,LEAVEDATE_ID,REASON from compensation_leave_days WHERE STAFF_ID =$staffid AND STATUS = 1 AND abs(DATEDIFF(CDATE,CURDATE()))<180 ORDER BY CDATE";
 		echo sqlToJson($conn,$sql);
 		return;
 	}
@@ -745,6 +782,49 @@ switch($op){
 		$sql = "SELECT LEAVE_ID FROM STAFF_LEAVE WHERE LEAVE_TYPE='".$ltype."' AND STAFF_ID=".$sta_id." ORDER BY APPLY_DATE DESC LIMIT 1";
 		echo sqlToJson($conn,$sql);
 		break;
+	}
+	case '22':{
+		$attr = $_POST['attr'];
+		$table = $_POST['table'];
+		$arr = explode(',',$attr);
+		$sql = "SELECT ".$attr." FROM ".$table;
+		echo sqlToJson($conn,$sql);
+		break;
+	}
+	case '23':{
+		$class = $_POST['clasVal'];
+		$pd = $_POST['posd'];
+		$sql = "CALL GET_ALLOTTED_SLOT('$class',DATE('$pd'))";
+		echo sqlToJson($conn,$sql);
+		break;
+	}
+	case '24': //Auto Reject Options
+	{
+		if(!$leaveIds = $_POST['leaveId']){
+			echo mysqli_error($conn);exit;
+		}
+		for($i=0;$i<sizeof($leaveIds);$i++){
+			//echo "HI".$leaveIds[$i];
+			$sql = "UPDATE STAFF_LEAVE SET STATUS=5 WHERE LEAVE_ID=$leaveIds[$i] ";
+			if(!mysqli_query($conn,$sql)){
+				Die(mysqli_error($conn));
+				exit();
+			}
+			$sql = "UPDATE STAFF_PERIOD_ALLOCATION SET STATUS = 5 WHERE LEAVE_ID IN (SELECT SLDID FROM STAFF_LEAVE_DAYS WHERE LEAVE_ID = $leaveIds[$i]) AND STATUS = 0";
+			if(!mysqli_query($conn,$sql)){
+				Die(mysqli_error($conn));
+				exit();
+			}
+			$sql = "UPDATE STAFF_LEAVE_TYPE SLT JOIN STAFF_LEAVE SL ON SL.STAFF_ID=SLT.STAFF_ID AND SL.LEAVE_TYPE=SLT.LEAVE_TYPE SET SLT.NOD = SLT.NOD-SL.NOD WHERE SL.LEAVE_ID =  $leaveIds[$i]";
+			if(!mysqli_query($conn,$sql)){
+				Die(mysqli_error($conn));
+				exit();
+			}
+		}
+		echo 1;
+		break;
+		//return;
+		//exit;
 	}
 	default:{
 		echo "Not Valid Op Code";

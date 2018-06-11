@@ -72,16 +72,29 @@
 									<div class="col-sm-9">
 										<select class="form-control" id="cate"  name="cate">
 											<option value="none" selected  >SELECT YOUR CATEGORY</option>
-											<option value="t" >Teaching staff</option>
-											<option value="nt" >Non Teaching staff</option>
-                                            <option value="rs" >Research Scholar</option>
-                                            <option value="ot" >Others</option>
-
-
+											<option value="RT" >Regular Teaching Staff</option>
+											<option value="RNT" >Regular Non Teaching staff</option>
+                                            <option value="TF" >Teaching Fellows</option>
+                                            <option value="NT" >Non Teaching - No Leave</option>
+											<option value="RS30" >Research Scholors - 30</option>
+											<option value="RS20" >Research Scholors - 20</option>
+											<option value="RSO" >Research Scholors - Others</option>
+											<option value="OT" >Others</option>
 										</select>
 									</div>
 								</div>
                                 <!----CHANGED CODE-->
+					<div class="form-group">
+						<label class="control-label col-sm-3" for="nod">Operation</label>
+						<div class="col-sm-9">
+							<select class="form-control" id="oper"  name="oper">
+								<option value="none" selected  >SELECT YOUR OPERATION</option>
+								<option value="update1" >Updation of Category Only</option>
+								<option value="update" >Updation - All</option>
+								<option value="insert" >Insertion</option>
+							</select>
+						</div>
+					</div>
 					<div class="form-group" id="nodgp">
 						
 							<div class="col-sm-9">

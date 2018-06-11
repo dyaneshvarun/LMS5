@@ -45,8 +45,8 @@ if(!$row3 = mysql_fetch_array($result3))
 {
 die('3 Could not connect: ' . mysql_error());
 }
-$balanced=$row3[2]-$nod-$availed;
-$leavetypename=$row3[1];
+$balanced=$row3[3]-$nod-$availed;
+$leavetypename=$row3[2];
 $staff_leave_days1="select * from STAFF_LEAVE_DAYS where leave_id =".$leaveid;
 $result8= mysql_query($staff_leave_days1);
 $leavedays=" ";

@@ -125,6 +125,7 @@
 								<th>Class</th>
 								<th>Staff Name</th>
 								<th>Status</th>
+								<th>Postponed Date & Hour</th>
 							</thead>
 							<tbody>
 							<?php
@@ -136,10 +137,20 @@
 									else if($row1['STATUS'] == 1){
 										$stat = "Accepted";
 										$clas = "success";
+										if($row1['PDATE']!=NULL)
+										{
+											$stat="Postponed";
+											$clas ="info";
+										}
+										
 									}
 									else if($row1['STATUS'] == 2){
 										$stat = "Rejected";
 										$clas = "danger";
+									}
+									else if($row1['STATUS'] == 5){
+										$stat = "Auto Rejected";
+										$clas = "info";
 									}
 									echo"<tr class='".$clas."'>";
 									echo "<td>".$row1['ALTER_DATE']."</td>";
@@ -153,6 +164,9 @@
 									$row3 = mysqli_fetch_assoc($res3);
 									echo "<td>".$row3['STAFF_NAME']."</td>";
 									echo "<td>".$stat."</td>";
+									if($row1['PDATE']!=NULL)
+									echo "<td>".$row1['PDATE']." & ".$row1['PHR']."</td>";
+									else echo "<td></td>";
 									echo "</tr>";
 								}
 							?>
@@ -160,7 +174,7 @@
 						</table>
 						<div>
 						<?php
-							if($row['LEAVE_TYPE']=="CL") $x = "tablePdfCL.php";
+							if($row['LEAVE_TYPE']=="CL" || $row['LEAVE_TYPE']=="CL6" || $row['LEAVE_TYPE']=="CL25" || $row['LEAVE_TYPE']=="CL30" ) $x = "tablePdfCL.php";
 							else if($row['LEAVE_TYPE']=="RH") $x = "tablePdfCL.php";
 							else if($row['LEAVE_TYPE']=="SCL") $x = "tablePdfCL.php";
 							else if($row['LEAVE_TYPE']=="ML" && $numberOfDays<=3) $x = "tablePdfCL.php";
@@ -169,12 +183,14 @@
 							else if($row['LEAVE_TYPE']=="EL" && $numberOfDays>3) $x = "tablePdfML.php";
 							else if($row['LEAVE_TYPE']=="CPL") $x = "tablePdfCL.php";
 							else if($row['LEAVE_TYPE']=="OD") $x = "tablePdfOD.php";
-							
 						?>
 						<form method="GET" action="<?php echo $x ?>">
 							<input type="hidden" name='LT' value="<?php echo $row['LEAVE_TYPE']?>"> 
 							<input type="hidden" name='LID' value="<?php echo $row['LEAVE_ID']?>"> 
-							<input class= "form-control btn btn-success"type="submit" value="GET PDF">
+							<?php if($row['FR_DATE'] > date('Y-m-d',mktime(0, 0, 0, 1, 1,2018))){
+								echo '<input class= "form-control btn btn-success"type="submit" value="GET PDF">';
+							}
+							?>
 						</form>
 					</div>
 					</div>

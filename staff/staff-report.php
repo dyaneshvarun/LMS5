@@ -115,7 +115,8 @@
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#casualLeave">Casual Leave</a>
-                                        </h4>
+											<span class="pull-right" id="clt"></span>
+										</h4>
 										<div id="count1"></div>
                                     </div>
                                     <div id="casualLeave" class="panel-collapse collapse in">
@@ -128,7 +129,8 @@
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#RH">Restricted Holiday</a>
-                                        </h4>
+											<span class="pull-right" id="rht"></span>
+										</h4>
 										<div id="count1"></div>
                                     </div>
                                     <div id="RH" class="panel-collapse collapse">
@@ -141,7 +143,8 @@
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#SCL" color='white'>Special Casual Leave</a>
-                                        </h4>
+											<span class="pull-right" id="sclt"></span>
+										</h4>
 										<div id="count1"></div>
                                     </div>
                                     <div id="SCL" class="panel-collapse collapse">
@@ -154,7 +157,8 @@
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#OD">On Duty</a>
-                                        </h4>
+											<span class="pull-right" id="odt"></span>
+										</h4>
 										<div id="count1"></div>
                                     </div>
                                     <div id="OD" class="panel-collapse collapse">
@@ -167,7 +171,8 @@
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#ML">Medical Leave</a>
-                                        </h4>
+											<span class="pull-right" id="mlt"></span>
+										</h4>
 										<div id="count1"></div>
                                     </div>
                                     <div id="ML" class="panel-collapse collapse">
@@ -180,7 +185,8 @@
                                     <div class="panel-heading">
                                         <h4 class="panel-title">
                                             <a data-toggle="collapse" data-parent="#accordion" href="#EL">Earned Leave</a>
-                                        </h4>
+											<span class="pull-right" id="elt"></span>
+										</h4>
 										<div id="count1"></div>
                                     </div>
                                     <div id="EL" class="panel-collapse collapse">

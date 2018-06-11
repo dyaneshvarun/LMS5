@@ -222,6 +222,7 @@
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 	<Script src="rh.js"></Script>
+	<script src="leaveAccess.js"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

@@ -209,6 +209,7 @@
     <!-- jQuery -->
     <script src="../bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="compensation.js"></script>
+	<script src="leaveAccess.js"></script>
 	<script src="../jquery-ui.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

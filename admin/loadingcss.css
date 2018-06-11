@@ -1,0 +1,21 @@
+
+		.modal1 {
+			display:    none;
+			position:   fixed;
+			z-index:    1000;
+			top:        0;
+			left:       0;
+			height:     100%;
+			width:      100%;
+			background: rgba( 255, 255, 255, .8 ) 
+						50% 50% 
+						no-repeat;
+		}
+		.modal1-content {
+			background-color: #fefefe;
+			margin: 15% auto; /* 15% from the top and centered */
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%; /* Could be more or less, depending on screen size */
+		}
+	
