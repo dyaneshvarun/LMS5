@@ -1,8 +1,8 @@
 <?php
 
 	$hostname = "localhost";
-	$username = "istleaveadmin";
-	$password = "lms@78";
+	$username = "Type in your username here....";
+	$password = "Type your password here ...";
 	$database = "newsys";
 	
 	$conn = mysqli_connect($hostname,$username,$password,$database);
